@@ -223,6 +223,11 @@ for epoch in range(first_epoch, args.epochs + 1):
                 """
                 Here you should compute features for RGB and Depth, concatenate them along the feature dimension
                 and then compute the main task logits.
+                
+                ###
+                ## what are logits? Here:
+                ## https://www.quora.com/What-are-Logits-in-deep-learning?share=1
+                ###
 
                 Then compute the classidication loss.
                 """
