@@ -126,17 +126,24 @@ def add_base_args(parser: argparse.ArgumentParser):
     parser.add_argument("--dropout_p", default=0.5, help="Dropout (not for the backbone!)")
 
     parser.add_argument('--test_batches', default=100, type=int,
-                        help="Number of batches to be considered at test time for source classification and the" 
+                        help="Number of batches to be considered at test time for source classification and the"
                              " rotation task. Note that the evaluation on target is always done on all batches")
     parser.add_argument('--resume', action='store_true', help="Resume from checkpoint if it exists")
 
+    # added from original code
+    parser.add_argument("--train_file_source", default=None)
+    parser.add_argument("--test_file_source", default=None)
+    parser.add_argument("--train_file_target", default=None)
+    parser.add_argument("--test_file_target", default=None)
+
 
 def make_paths(root):
-    data_root_source = os.path.join(root, 'synROD')
-    data_root_target = os.path.join(root, 'ROD')
-    split_source_train = os.path.join(data_root_source, 'synARID_50k-split_sync_train1.txt')
-    split_source_test = os.path.join(data_root_source, 'synARID_50k-split_sync_test1.txt')
-    split_target = os.path.join(data_root_target, 'wrgbd_40k-split_sync.txt')
+    data_root_source = os.path.join(root, './datasets_dir/ROD-synROD/synROD/')
+    data_root_target = os.path.join(root, './dataset_dir/ROD-synROD/ROD/')
+
+    split_source_train = os.path.join(data_root_source, './synARID_50k-split_sync_train1.txt')
+    split_source_test = os.path.join(data_root_source, './synARID_50k-split_sync_test1.txt')
+    split_target = os.path.join(data_root_target, './wrgbd_40k-split_sync.txt')
 
     return data_root_source, data_root_target, split_source_train, split_source_test, split_target
 

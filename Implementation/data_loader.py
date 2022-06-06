@@ -51,11 +51,9 @@ def make_sync_dataset(root, label, ds_name='synROD'):
 
 
 def get_relative_rotation(rgb_rot, depth_rot):
-    # TODO
-    rel_rot = ...
-    """
-    Here you should compute the relative angle index between rgb_rot and depth_rot
-    """
+    rel_rot = rgb_rot - depth_rot
+    if rel_rot < 0:
+        rel_rot += 4
     assert rel_rot in range(4)
     return rel_rot
 
