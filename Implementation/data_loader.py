@@ -41,9 +41,9 @@ def make_sync_dataset(root, label, ds_name='synROD'):
             elif ds_name == 'ROD':
                 #print("b")
                 path_rgb = path.replace('***', 'crop')
-                #path_rgb = path_rgb.replace('???', 'rgb')
+                path_rgb = path_rgb.replace('???', 'rgb')
                 path_depth = path.replace('***', 'depthcrop')
-                #path_depth = path_depth.replace('???', 'surfnorm')
+                path_depth = path_depth.replace('???', 'surfnorm')
             else:
                 raise ValueError('Unknown dataset {}. Known datasets are synROD, ROD'.format(ds_name))
             gt = int(data[1])
