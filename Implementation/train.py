@@ -429,20 +429,20 @@ for epoch in range(first_epoch, args.epochs + 1):
             if num_batch >= args.test_batches and args.test_batches > 0:
                 break
             # Move tensors to GPU
-            img_rgb, img_depth, img_label_source = map_to_device(device, (imgs_rgb, imgs_depth, labels))
+            img_rgb, img_depth, img_label_source = map_to_device(device, (img_rgb, img_depth, img_label_source))
             # Compute features
-            feat_rgb, _ = netG_rgb(imgs_rgb)
-            feat_depth, _ = netG_depth(imgs_depth)
+            feat_rgb, _ = netG_rgb(img_rgb)
+            feat_depth, _ = netG_depth(img_depth)
             # Compute predictions
             pred = netF(torch.cat((feat_rgb, feat_depth), 1))
             pred = F.softmax(pred, dim=1)
-            correct += (torch.argmax(pred, dim=1) == labels).sum().item()
-            total += labels.shape[0]
+            correct += (torch.argmax(pred, dim=1) == img_label_source).sum().item()
+            num_predictions += img_label_source.shape[0]
 
             pb.update(1)
 
         # TODO: Output accuracy
-        accuracy = correct / total
+        accuracy = correct / num_predictions
 
         print("Epoch: {} - Val TRG ROT accuracy:{}".format(epoch, accuracy))
 
@@ -450,9 +450,9 @@ for epoch in range(first_epoch, args.epochs + 1):
 
     # TODO: log loss and accuracy
 
-    writer.add_scalar("Loss/train_target", loss_rot, epoch)
-    writer.add_scalar("Loss/val_target", val_loss_class_target, epoch)
-    writer.add_scalar("Accuracy/val_target", val_acc_class_target, epoch)
+    #writer.add_scalar("Loss/train_target", loss_rot, epoch)
+    #writer.add_scalar("Loss/val_target", val_loss_class_target, epoch)
+    writer.add_scalar("Accuracy/val_target", accuracy, epoch)
 
     # Save checkpoint
     save_checkpoint(checkpoint_path, epoch, net_list, optims_list)
