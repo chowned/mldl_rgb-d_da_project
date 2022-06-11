@@ -20,6 +20,7 @@ def is_image_file(filename):
 def load_image(path):
     return Image.open(path).convert('RGB')
 
+# UNUSED!
 def load_image_erasing(path):
     tensor = torchvision.transforms.ToTensor()
     random_erase = torchvision.transforms.RandomErasing(p=1)
@@ -29,7 +30,6 @@ def load_image_erasing(path):
     img = random_erase(img)
 
     return img
-
 
 def make_sync_dataset(root, label, ds_name='synROD'):
     images = []
@@ -89,7 +89,9 @@ class MyTransform(object):
         img = TF.normalize(img, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         return img
 
+# ORIGINAL!
 #not using load_image_erasing
+
 class DatasetGeneratorMultimodal(Dataset):
     def __init__(self, root, label, ds_name='synROD', do_rot=False, transform=None):
         imgs = make_sync_dataset(root, label, ds_name=ds_name)
@@ -132,8 +134,7 @@ class DatasetGeneratorMultimodal(Dataset):
 
     def __len__(self):
         return len(self.imgs)
-
-
+# UNUSED!
 #using load_image_erasing
 class DatasetGeneratorMultimodalErasing(Dataset):
     def __init__(self, root, label, ds_name='synROD', do_rot=False, transform=None):
