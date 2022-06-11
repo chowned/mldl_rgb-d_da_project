@@ -1,5 +1,5 @@
 # mldl_rgb-d_da_project
-Project for a different implementation for DA on RGB-D pictures
+Project for a different implementation of https://github.com/MRLoghmani/relative-rotation for DA on RGB-D pictures
 
 To run the code:
 
@@ -9,6 +9,5 @@ To run the code:
 
 Paper based on:
 
-1) https://github.com/MRLoghmani/relative-rotation directly derived paper for rotation
-2) https://arxiv.org/pdf/1909.11825.pdf suggesting to implement multiple tasks for recognition
-3) https://arxiv.org/pdf/1603.05027v3.pdf paper for changing the layers position
+1) https://arxiv.org/pdf/1909.11825.pdf suggesting to implement multiple tasks for recognition
+2) https://arxiv.org/pdf/1603.05027v3.pdf paper for changing the layers position
