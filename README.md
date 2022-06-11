@@ -9,5 +9,5 @@ To run the code:
 
 Paper based on:
 
-1) https://arxiv.org/pdf/1909.11825.pdf suggesting to implement multiple tasks for recognition
+1) https://arxiv.org/pdf/1909.11825.pdf suggesting to implement multiple tasks for recognition -> https://github.com/yueatsprograms/uda_release
 2) https://arxiv.org/pdf/1603.05027v3.pdf paper for changing the layers position
