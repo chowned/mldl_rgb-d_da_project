@@ -66,6 +66,7 @@ test_transform = MyTransform([int((256 - INPUT_RESOLUTION) / 2), int((256 - INPU
 data_root_source, data_root_target, split_source_train, split_source_test, split_target = make_paths(args.data_root)
 
 # Source: training set
+
 train_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_train, do_rot=False)
 # Source: test set
 test_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_test, do_rot=False,
@@ -81,8 +82,7 @@ rot_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_train
 # Source: test set (for relative rotation)
 rot_test_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_test, do_rot=True)
 # Target: training and test set (for relative rotation)
-rot_set_target = DatasetGeneratorMultimodal(data_root_target, split_target, ds_name='ROD',
-                                            do_rot=True)
+rot_set_target = DatasetGeneratorMultimodal(data_root_target, split_target, ds_name='ROD',do_rot=True)
 
 """
     Prepare data loaders

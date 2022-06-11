@@ -5,8 +5,10 @@ from torchvision import models
 class ResBase(nn.Module):
     def __init__(self):
         super(ResBase, self).__init__()
-        # Initialize pre-trained resnet18
+        # Initialize pre-trained resnet34
+
         model_resnet = models.resnet34(pretrained=True)
+
 
         # "Steal" pretrained layers from the torchvision pretrained Resnet18
         self.conv1 = model_resnet.conv1
