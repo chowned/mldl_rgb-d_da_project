@@ -11,3 +11,7 @@ Paper based on:
 
 1) https://arxiv.org/pdf/1909.11825.pdf suggesting to implement multiple tasks for recognition -> https://github.com/yueatsprograms/uda_release
 2) https://arxiv.org/pdf/1603.05027v3.pdf paper for changing the layers position
+
+
+New Implementation:
+1)Changing implementation on original pytorch https://github.com/pytorch/vision/blob/1aef87d01eec2c0989458387fa04baebcc86ea7b/torchvision/models/resnet.py#L75
