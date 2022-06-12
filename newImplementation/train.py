@@ -4,7 +4,8 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 
-from net import ResBase, ResClassifier, RelativeRotationClassifier
+from net import ResBase, ResClassifier, RelativeRotationClassifier, Convolutional
+#import custom_resnet
 from data_loader import DatasetGeneratorMultimodal, MyTransform, INPUT_RESOLUTION
 from utils import *
 from tqdm import tqdm
@@ -23,8 +24,10 @@ args = parser.parse_args()
 hp_list = [
     # Task
     'rgbd-rr',
-    # Backbone. For these experiments we only use ResNet18
-    'resnet18',
+    #'rgbd-ae',
+    # Backbone. For these experiments we only use ResNet34
+    #'resnet34',
+    'bottleneck', #custom era prima
     # Number of epochs
     args.epochs,
     # Learning rate
@@ -66,7 +69,6 @@ test_transform = MyTransform([int((256 - INPUT_RESOLUTION) / 2), int((256 - INPU
 data_root_source, data_root_target, split_source_train, split_source_test, split_target = make_paths(args.data_root)
 
 # Source: training set
-
 train_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_train, do_rot=False)
 # Source: test set
 test_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_test, do_rot=False,
@@ -82,7 +84,8 @@ rot_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_train
 # Source: test set (for relative rotation)
 rot_test_set_source = DatasetGeneratorMultimodal(data_root_source, split_source_test, do_rot=True)
 # Target: training and test set (for relative rotation)
-rot_set_target = DatasetGeneratorMultimodal(data_root_target, split_target, ds_name='ROD',do_rot=True)
+rot_set_target = DatasetGeneratorMultimodal(data_root_target, split_target, ds_name='ROD',
+                                            do_rot=True)
 
 """
     Prepare data loaders
@@ -211,7 +214,7 @@ for epoch in range(first_epoch, args.epochs + 1):
                 features_source = torch.cat((feat_rgb, feat_depth), 1)
                 logits = netF(features_source)
 
-                # Classification los
+                # Classification loss
                 loss_rec = ce_loss(logits, img_label_source)
 
                 # Entropy loss

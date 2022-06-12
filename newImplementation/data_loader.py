@@ -20,16 +20,6 @@ def is_image_file(filename):
 def load_image(path):
     return Image.open(path).convert('RGB')
 
-# UNUSED!
-def load_image_erasing(path):
-    tensor = torchvision.transforms.ToTensor()
-    random_erase = torchvision.transforms.RandomErasing(p=1)
-
-    img = Image.open(path)
-    img = tensor(img)
-    img = random_erase(img)
-
-    return img
 
 def make_sync_dataset(root, label, ds_name='synROD'):
     images = []
@@ -89,8 +79,6 @@ class MyTransform(object):
         img = TF.normalize(img, [0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         return img
 
-# ORIGINAL!
-#not using load_image_erasing
 
 class DatasetGeneratorMultimodal(Dataset):
     def __init__(self, root, label, ds_name='synROD', do_rot=False, transform=None):
@@ -105,50 +93,6 @@ class DatasetGeneratorMultimodal(Dataset):
         path_rgb, path_depth, target = self.imgs[index]
         img_rgb = load_image(path_rgb)
         img_depth = load_image(path_depth)
-        rot_rgb = None
-        rot_depth = None
-
-        # If a custom transform is specified apply that transform
-        if self.transform is not None:
-            img_rgb = self.transform(img_rgb)
-            img_depth = self.transform(img_depth)
-        else:  # Otherwise define a random one (random cropping, random horizontal flip)
-            top = random.randint(0, 256 - INPUT_RESOLUTION)
-            left = random.randint(0, 256 - INPUT_RESOLUTION)
-            flip = random.choice([True, False])
-
-            # Random multi-modal rotation is required
-            if self.do_rot:
-                # Define the rotation angle for both the modalities
-                rot_rgb = random.choice([0, 1, 2, 3])
-                rot_depth = random.choice([0, 1, 2, 3])
-
-            transform = MyTransform([top, left], flip)
-            # Apply the same transform to both modalities, rotating them if required
-            img_rgb = transform(img_rgb, rot_rgb)
-            img_depth = transform(img_depth, rot_depth)
-
-        if self.do_rot and (self.transform is None):
-            return img_rgb, img_depth, target, get_relative_rotation(rot_rgb, rot_depth)
-        return img_rgb, img_depth, target
-
-    def __len__(self):
-        return len(self.imgs)
-# UNUSED!
-#using load_image_erasing
-class DatasetGeneratorMultimodalErasing(Dataset):
-    def __init__(self, root, label, ds_name='synROD', do_rot=False, transform=None):
-        imgs = make_sync_dataset(root, label, ds_name=ds_name)
-        self.root = root
-        self.label = label
-        self.imgs = imgs
-        self.transform = transform
-        self.do_rot = do_rot
-
-    def __getitem__(self, index):
-        path_rgb, path_depth, target = self.imgs[index]
-        img_rgb = load_image_erasing(path_rgb)
-        img_depth = load_image_erasing(path_depth)
         rot_rgb = None
         rot_depth = None
 
