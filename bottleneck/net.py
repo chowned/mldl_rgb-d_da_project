@@ -101,19 +101,21 @@ class ResBase(nn.Module):
         self.bn1 = nn.BatchNorm2d(3)
         self.relu = model_resnet.relu
         self.maxpool = model_resnet.maxpool
-        self.layer1 = model_resnet.layer1
-        self.layer2 = model_resnet.layer2
+
 
 
         #implementing a neuron bottleneck
-        self.conv5 = nn.Conv2d(in_channels=128, out_channels=40, kernel_size=5, stride=1, padding=1)
-        self.bn5 = nn.BatchNorm2d(40)
-        self.conv6 = nn.Conv2d(in_channels=40, out_channels=64, kernel_size=5, stride=1, padding=1)
+        self.conv5 = nn.Conv2d(in_channels=128, out_channels=64, kernel_size=5, stride=1, padding=1)
+        self.bn5 = nn.BatchNorm2d(64)
+        self.conv8 = nn.Conv2d(in_channels=64, out_channels=15, kernel_size=5, stride=1, padding=1)
+        self.bn8 = nn.BatchNorm2d(15)
+        self.conv6 = nn.Conv2d(in_channels=15, out_channels=64, kernel_size=5, stride=1, padding=1)
         self.bn6 = nn.BatchNorm2d(64)
         self.conv7 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=5, stride=1, padding=1)
         self.bn7 = nn.BatchNorm2d(128)
 
-
+        self.layer1 = model_resnet.layer1
+        self.layer2 = model_resnet.layer2 #after is 128
 
         self.layer3 = model_resnet.layer3
         self.layer4 = model_resnet.layer4
@@ -129,6 +131,8 @@ class ResBase(nn.Module):
         x = self.layer2(x)
 
         x = nn.functional.relu(self.bn5(self.conv5(x)))
+        #added later
+        x = nn.functional.relu(self.bn8(self.conv8(x)))
         x = nn.functional.relu(self.bn6(self.conv6(x)))
         x = nn.functional.relu(self.bn7(self.conv7(x)))
 

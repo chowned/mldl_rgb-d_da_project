@@ -27,7 +27,7 @@ hp_list = [
     #'rgbd-ae',
     # Backbone. For these experiments we only use ResNet34
     #'resnet34',
-    'bottleneck', #custom era prima
+    'bottleneck-different-layering', #custom era prima
     # Number of epochs
     args.epochs,
     # Learning rate
