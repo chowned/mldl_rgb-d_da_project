@@ -4,8 +4,7 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 
-from net import ResBase, ResClassifier, RelativeRotationClassifier, Convolutional
-#import custom_resnet
+from net import ResBase, ResClassifier, RelativeRotationClassifier
 from data_loader import DatasetGeneratorMultimodal, MyTransform, INPUT_RESOLUTION
 from utils import *
 from tqdm import tqdm
@@ -24,10 +23,8 @@ args = parser.parse_args()
 hp_list = [
     # Task
     'rgbd-rr',
-    #'rgbd-ae',
-    # Backbone. For these experiments we only use ResNet34
-    #'resnet34',
-    'bottleneck', #custom era prima
+    # Backbone. For these experiments we only use ResNet18
+    'resnet18',
     # Number of epochs
     args.epochs,
     # Learning rate
@@ -214,7 +211,7 @@ for epoch in range(first_epoch, args.epochs + 1):
                 features_source = torch.cat((feat_rgb, feat_depth), 1)
                 logits = netF(features_source)
 
-                # Classification loss
+                # Classification los
                 loss_rec = ce_loss(logits, img_label_source)
 
                 # Entropy loss
