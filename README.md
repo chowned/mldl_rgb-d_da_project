@@ -18,3 +18,4 @@ New Implementation:
 
 1) Changing implementation on original pytorch https://github.com/pytorch/vision/blob/1aef87d01eec2c0989458387fa04baebcc86ea7b/torchvision/models/resnet.py#L75
 2) Code for the bottleneck has been modified from https://docs.microsoft.com/en-us/windows/ai/windows-ml/tutorials/pytorch-train-model .
+3) https://github.com/bbrattoli/JigsawPuzzlePytorch
