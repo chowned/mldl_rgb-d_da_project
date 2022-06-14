@@ -5,7 +5,7 @@ To run the code:
 
 1) create a dataset folder, check train.sh to see how to create it
 2) download datasets and put the dataset folder into the Implementation folder
-3) if running on linux, run the train.sh script in the same folder of the python scripts
+3) if running on linux, run the train.sh or run.sh script in the same folder of the python scripts
 
 Paper based on:
 
