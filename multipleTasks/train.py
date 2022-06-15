@@ -10,7 +10,7 @@ from utils import *
 from tqdm import tqdm
 import os
 
-from SSHead import extractor_from_layer3
+#from SSHead import extractor_from_layer3
 
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 # Parse arguments
