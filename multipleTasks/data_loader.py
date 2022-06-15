@@ -35,12 +35,12 @@ def is_image_file(filename):
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 
 
-def load_image(path,do_flip):
+def load_image(path,do_flip,flip):
     img = Image.open(path)
     #img = img.flip(1)
     #img = np.array(list(reversed(img)))
     if do_flip:
-        if bool(random.getrandbits(1)):
+        if flip:
             img = img.transpose(method=Image.FLIP_TOP_BOTTOM)
     return img.convert('RGB')
 
@@ -125,8 +125,14 @@ class DatasetGeneratorMultimodal(Dataset):
 
     def __getitem__(self, index):
         path_rgb, path_depth, target = self.imgs[index]
-        img_rgb = load_image(path_rgb,self.do_flip)
-        img_depth = load_image(path_depth,self.do_flip)
+        """
+        implementing labels for flipping
+        """
+        flip_rgb = bool(random.getrandbits(1))
+        flip_depth = bool(random.getrandbits(1))
+
+        img_rgb = load_image(path_rgb,self.do_flip,flip_rgb)
+        img_depth = load_image(path_depth,self.do_flip,flip_depth)
         trans_rgb = None
         trans_depth = None
 
@@ -163,7 +169,12 @@ class DatasetGeneratorMultimodal(Dataset):
             """
 
         if self.do_rot and (self.transform is None):
-            return img_rgb, img_depth, target, get_relative_rotation(trans_rgb, trans_depth)
+            calculated_label = get_relative_rotation(trans_rgb, trans_depth)
+            if flip_rgb:
+                calculated_label += 10
+            if flip_depth:
+                calculated_label += 100
+            return img_rgb, img_depth, target, calculated_label
         return img_rgb, img_depth, target
 
     def __len__(self):

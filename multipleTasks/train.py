@@ -168,26 +168,26 @@ netG_depth = ResBase()
 netF = ResClassifier(input_dim=input_dim_F * 2, class_num=47, dropout_p=args.dropout_p)
 netF.apply(weights_init)
 # Pretext task: relative rotation classifier
-netF_rot = RelativeRotationClassifier(input_dim=input_dim_F * 2, class_num=4) #input_dim=input_dim_F * 2, class_num=4
+netF_rot = RelativeRotationClassifier(input_dim=input_dim_F * 2, class_num=114) #input_dim=input_dim_F * 2, class_num=4
 netF_rot.apply(weights_init)
 
 """
 Network for other tasks
 """
 
-netF_flip = FlippingClassifier(input_dim=input_dim_F / 2, class_num=2)
-netF_rot.apply(weights_init)
+#netF_flip = FlippingClassifier(input_dim=input_dim_F / 2, class_num=2)
+#netF_flip.apply(weights_init)
 
 """
 following weights of the other networks
 """
 
-ext_rgb = extractor_from_layer3(netG_rgb)
-ext_depth = extractor_from_layer3(netG_depth)
+#ext_rgb = extractor_from_layer3(netG_rgb)
+#ext_depth = extractor_from_layer3(netG_depth)
 
 
 # Define a list of the networks. Move everything on the GPU
-net_list = [netG_rgb, netG_depth, netF, netF_rot, netF_flip]
+net_list = [netG_rgb, netG_depth, netF, netF_rot]
 net_list = map_to_device(device, net_list)
 
 # Classification loss
@@ -202,9 +202,9 @@ opt_f_rot = optim.SGD(netF_rot.parameters(), lr=args.lr * args.lr_mult, momentum
 """
 Optimizer for other tasks
 """
-opt_f_flip = optim.SGD(netF_flip.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
+#opt_f_flip = optim.SGD(netF_flip.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
 
-optims_list = [opt_g_rgb, opt_g_depth, opt_f, opt_f_rot, opt_f_flip]
+optims_list = [opt_g_rgb, opt_g_depth, opt_f, opt_f_rot]
 
 
 first_epoch = 1
@@ -451,8 +451,8 @@ for epoch in range(first_epoch, args.epochs + 1):
 
         # TODO
         writer.add_scalar("Loss/rot", loss_rot, epoch)
-        writer.add_scalar("Loss/trans_val", val_loss_rot, epoch)
-        writer.add_scalar("Accuracy/trans_val", trans_val_acc, epoch)
+        writer.add_scalar("Loss/rot_val", val_loss_rot, epoch)
+        writer.add_scalar("Accuracy/rot_val", trans_val_acc, epoch)
 
     # Classification - target
     with EvaluationManager(net_list), tqdm(total=len(test_loader_target), desc="TestClT") as pb:
