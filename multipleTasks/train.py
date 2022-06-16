@@ -10,9 +10,12 @@ from utils import *
 from tqdm import tqdm
 import os
 
-#from SSHead import extractor_from_layer3
+from SSHead import extractor_from_layer3
 
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
+
+class_num_classifier=9 # 114
+
 # Parse arguments
 parser = argparse.ArgumentParser()
 
@@ -38,17 +41,26 @@ hp_list = [
     # Backbone. For these experiments we only use ResNet18
     'resnet18_MT',
     # Number of epochs
-    args.epochs,
+    #'ep',
+    #args.epochs,
     # Learning rate
+    'lr',
     args.lr,
     # Learning rate multiplier for the non-pretrained parts of the network
+    'lr_m',
     args.lr_mult,
     # Batch size
+    'bs',
     args.batch_size,
     # Trade-off weight for the rotation classifier loss
+    'wr',
     args.weight_rot,
     # Trade-off weight for the entropy regularization loss
-    args.weight_ent
+    'we',
+    args.weight_ent,
+    'wd',
+    args.weight_decay
+
 ]
 if args.suffix is not None:
     hp_list.append(args.suffix)
@@ -168,7 +180,7 @@ netG_depth = ResBase()
 netF = ResClassifier(input_dim=input_dim_F * 2, class_num=47, dropout_p=args.dropout_p)
 netF.apply(weights_init)
 # Pretext task: relative rotation classifier
-netF_rot = RelativeRotationClassifier(input_dim=input_dim_F * 2, class_num=114) #input_dim=input_dim_F * 2, class_num=4
+netF_rot = RelativeRotationClassifier(input_dim=input_dim_F * 2, class_num=class_num_classifier) #input_dim=input_dim_F * 2, class_num=4
 netF_rot.apply(weights_init)
 
 """
