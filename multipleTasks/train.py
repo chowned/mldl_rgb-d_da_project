@@ -9,12 +9,13 @@ from data_loader import DatasetGeneratorMultimodal, MyTransform, INPUT_RESOLUTIO
 from utils import *
 from tqdm import tqdm
 import os
+#from torch.optim import *#Adam
 
-from SSHead import extractor_from_layer3
+#from SSHead import extractor_from_layer3
 
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
-class_num_classifier=9 # 114
+class_num_classifier=119 # 110+4+5 = 119
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -39,10 +40,10 @@ hp_list = [
     # Task
     'rgbd-rr',
     # Backbone. For these experiments we only use ResNet18
-    'resnet18_MT',
+    'Optimizer_resnet_MT_ALL',
     # Number of epochs
     #'ep',
-    #args.epochs,
+    #args.epoch
     # Learning rate
     'lr',
     args.lr,
@@ -206,9 +207,12 @@ net_list = map_to_device(device, net_list)
 ce_loss = nn.CrossEntropyLoss()
 
 # Optimizers
+#Adam
+#optim.SGD
+#RMSprop
 opt_g_rgb = optim.SGD(netG_rgb.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
 opt_g_depth = optim.SGD(netG_depth.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
-opt_f = optim.SGD(netF.parameters(), lr=args.lr * args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
+opt_f = optim.SGD(netF.parameters(), lr=args.lr*args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
 opt_f_rot = optim.SGD(netF_rot.parameters(), lr=args.lr * args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
 
 """

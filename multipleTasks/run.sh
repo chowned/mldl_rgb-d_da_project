@@ -2,7 +2,7 @@
 clear
 
 epochs=10
-batch_size=96
+batch_size=64
 
 
 lr1=0.0003 # --lr
@@ -43,4 +43,3 @@ clear
 #running code with lower weight decay
 echo "6 Running train.py --epoch $epochs --batch_size $batch_size --weight_decay $weight_decay"
 python3 ./train.py --resume --epoch $epochs --batch_size $batch_size --data_root ../../datasets_dir/ROD-synROD/ --weight_decay $weight_decay
-clear
