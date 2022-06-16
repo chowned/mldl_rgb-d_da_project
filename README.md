@@ -3,9 +3,8 @@ Project for a different implementation of https://github.com/MRLoghmani/relative
 
 To run the code:
 
-1) create a dataset folder, check train.sh to see how to create it
-2) download datasets and put the dataset folder into the Implementation folder
-3) if running on linux, run the train.sh or run.sh script in the same folder of the python scripts
+1) create a dataset folder, check check_project.sh to see how to create it
+2) if running on linux, run the check_project.sh or run.sh script in the same folder of the python scripts
 
 Paper based on:
 
