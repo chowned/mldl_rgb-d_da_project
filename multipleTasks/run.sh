@@ -16,9 +16,9 @@ echo "Careful, default batch size is 96, which needs 12GB of VRAM. Try 64 for 8G
 #read batch_size
 
 #running code with default parameters
-echo "1 Running train.py --epoch $epochs --batch_size $batch_size"
-python3 ./train.py --resume --epoch $epochs --batch_size $batch_size --data_root ../../datasets_dir/ROD-synROD/
-clear
+#echo "1 Running train.py --epoch $epochs --batch_size $batch_size"
+#python3 ./train.py --resume --epoch $epochs --batch_size $batch_size --data_root ../../datasets_dir/ROD-synROD/
+#clear
 
 #running code without DA
 #echo "2 Running train.py --epoch $epochs --batch_size $batch_size --weight_rot 0 --weight_ent 0"
@@ -30,10 +30,11 @@ echo "3 Running train.py --epoch $epochs --batch_size $batch_size --lr $lr1"
 python3 ./train.py --resume --epoch $epochs --batch_size $batch_size --data_root ../../datasets_dir/ROD-synROD/ --lr $lr1
 clear
 
+#commented as performance is worst than previous lr
 #running code with higher lr
-echo "4 Running train.py --epoch $epochs --batch_size $batch_size --lr $lr2"
-python3 ./train.py --resume --epoch $epochs --batch_size $batch_size --data_root ../../datasets_dir/ROD-synROD/ --lr $lr2
-clear
+#echo "4 Running train.py --epoch $epochs --batch_size $batch_size --lr $lr2"
+#python3 ./train.py --resume --epoch $epochs --batch_size $batch_size --data_root ../../datasets_dir/ROD-synROD/ --lr $lr2
+#clear
 
 #running code with higher lr_mult
 echo "5 Running train.py --epoch $epochs --batch_size $batch_size --lr_mult $lr_mult"
