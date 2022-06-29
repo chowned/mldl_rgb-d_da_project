@@ -26,8 +26,8 @@ hp_list = [
     # Backbone. For these experiments we only use ResNet18
     'resnet18',
     # Number of epochs
-    'ep',
-    args.epochs,
+    #'ep',
+    #args.epochs,
     # Learning rate
     #'lr',
     #args.lr,
