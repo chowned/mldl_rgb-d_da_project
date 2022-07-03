@@ -4,8 +4,8 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 
-from net import ResBase, ResClassifier, RelativeRotationClassifier, FlippingClassifier
-from data_loader import DatasetGeneratorMultimodal, MyTransform, INPUT_RESOLUTION
+from net_best_hp import ResBase, ResClassifier, RelativeRotationClassifier, FlippingClassifier
+from data_loader_best_hp import DatasetGeneratorMultimodal, MyTransform, INPUT_RESOLUTION
 from utils import *
 from tqdm import tqdm
 import os
@@ -15,7 +15,8 @@ import os
 
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
-class_num_classifier=114 # 110+4+5 = 119
+#1-2-3-4 + 5 + 10
+class_num_classifier=19 #114 # 110+4+5 = 119
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -40,7 +41,7 @@ hp_list = [
     # Task
     'rgbd-rr',
     # Backbone. For these experiments we only use ResNet18
-    'Optimizer_resnet18_MT_no_flip',
+    'Optimizer_resnet18_MTMC',
     # Number of epochs
     #'ep',
     #args.epoch
@@ -210,10 +211,10 @@ ce_loss = nn.CrossEntropyLoss()
 #Adam
 #optim.SGD
 #RMSprop
-opt_g_rgb = optim.SGD(netG_rgb.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
-opt_g_depth = optim.SGD(netG_depth.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
-opt_f = optim.SGD(netF.parameters(), lr=args.lr*args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
-opt_f_rot = optim.SGD(netF_rot.parameters(), lr=args.lr * args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
+opt_g_rgb = optim.Adam(netG_rgb.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+opt_g_depth = optim.Adam(netG_depth.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+opt_f = optim.Adam(netF.parameters(), lr=args.lr*args.lr_mult, weight_decay=args.weight_decay)
+opt_f_rot = optim.Adam(netF_rot.parameters(), lr=args.lr * args.lr_mult, weight_decay=args.weight_decay)
 
 """
 Optimizer for other tasks

@@ -45,8 +45,8 @@ hp_list = [
     #'ep',
     #args.epoch
     # Learning rate
-    'lr',
-    args.lr,
+    'lr_decayed',
+    #args.lr,
     # Learning rate multiplier for the non-pretrained parts of the network
     'lr_m',
     args.lr_mult,
