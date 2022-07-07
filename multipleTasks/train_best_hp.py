@@ -16,7 +16,7 @@ import os
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 
 #1-2-3-4 + 5 + 10
-class_num_classifier=19 #114 # 110+4+5 = 119
+class_num_classifier=114 #114 # 110+4+5 = 119
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -41,7 +41,7 @@ hp_list = [
     # Task
     'rgbd-rr',
     # Backbone. For these experiments we only use ResNet18
-    'Optimizer_resnet18_MTMC',
+    'resnet_MT_V4',
     # Number of epochs
     #'ep',
     #args.epoch
@@ -211,10 +211,11 @@ ce_loss = nn.CrossEntropyLoss()
 #Adam
 #optim.SGD
 #RMSprop
-opt_g_rgb = optim.Adam(netG_rgb.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-opt_g_depth = optim.Adam(netG_depth.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-opt_f = optim.Adam(netF.parameters(), lr=args.lr*args.lr_mult, weight_decay=args.weight_decay)
-opt_f_rot = optim.Adam(netF_rot.parameters(), lr=args.lr * args.lr_mult, weight_decay=args.weight_decay)
+opt_g_rgb = optim.SGD(netG_rgb.parameters(), lr=args.lr,momentum=0.9, weight_decay=args.weight_decay)
+opt_g_depth = optim.SGD(netG_depth.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
+opt_f = optim.SGD(netF.parameters(), lr=args.lr*args.lr_mult, momentum=0.9,  weight_decay=args.weight_decay)
+opt_f_rot = optim.SGD(netF_rot.parameters(), lr=args.lr * args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
+
 
 """
 Optimizer for other tasks

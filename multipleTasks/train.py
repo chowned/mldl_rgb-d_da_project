@@ -40,7 +40,7 @@ hp_list = [
     # Task
     'rgbd-rr',
     # Backbone. For these experiments we only use ResNet18
-    'Optimizer_resnet18_MT_no_flip',
+    'resnet18_MT_OHE',
     # Number of epochs
     #'ep',
     #args.epoch

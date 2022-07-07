@@ -175,9 +175,9 @@ class DatasetGeneratorMultimodal(Dataset):
             #        calculated_label += 5
             
             if flip_rgb:
-                calculated_label += 5
-            if flip_depth:
                 calculated_label += 10
+            if flip_depth:
+                calculated_label += 100
             
             return img_rgb, img_depth, target, calculated_label
         return img_rgb, img_depth, target
