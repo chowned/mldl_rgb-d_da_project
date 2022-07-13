@@ -71,12 +71,12 @@ class RelativeRotationClassifier(nn.Module):
             nn.ReLU(inplace=True)
         )
         self.conv_3x3 = nn.Sequential(
-            nn.Conv2d(self.projection_dim, self.projection_dim, (3, 3), stride=(2, 2)),
-            nn.BatchNorm2d(self.projection_dim),
+            nn.Conv2d(self.projection_dim, self.projection_dim * 2, (3, 3), stride=(2, 2)),
+            nn.BatchNorm2d(self.projection_dim * 2),
             nn.ReLU(inplace=True)
         )
         self.fc1 = nn.Sequential(
-            nn.Linear(self.projection_dim * 3 * 3, self.projection_dim),
+            nn.Linear(self.projection_dim * 3 * 3 * 2, self.projection_dim),
             nn.BatchNorm1d(self.projection_dim, affine=True),
             nn.ReLU(inplace=True),
             nn.Dropout(p=0.5)

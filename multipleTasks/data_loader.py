@@ -111,7 +111,7 @@ class MyTransform(object):
 
 
 class DatasetGeneratorMultimodal(Dataset):
-    def __init__(self, root, label, ds_name='synROD', do_rot=False, do_flip=False, transform=None):
+    def __init__(self, root, label, ds_name='synROD',domain="Source", do_rot=False, do_flip=False, transform=None):
         imgs = make_sync_dataset(root, label, ds_name=ds_name)
         self.root = root
         self.label = label
@@ -122,6 +122,7 @@ class DatasetGeneratorMultimodal(Dataset):
         deciding to do a vertical flip
         """
         self.do_flip = do_flip
+        self.domain  = domain
 
     def __getitem__(self, index):
         path_rgb, path_depth, target = self.imgs[index]
@@ -173,11 +174,12 @@ class DatasetGeneratorMultimodal(Dataset):
             #if self.do_flip:
             #    if flip_rgb==flip_depth:
             #        calculated_label += 5
-            
+            if self.domain=="Target":
+                calculated_label += 5
             if flip_rgb:
                 calculated_label += 10
             if flip_depth:
-                calculated_label += 100
+                calculated_label += 20
             
             return img_rgb, img_depth, target, calculated_label
         return img_rgb, img_depth, target
