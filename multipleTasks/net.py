@@ -2,6 +2,7 @@ import torch.nn as nn
 from torchvision import models
 
 
+
 class ResBase(nn.Module):
     def __init__(self):
         super(ResBase, self).__init__()
@@ -70,12 +71,12 @@ class RelativeRotationClassifier(nn.Module):
             nn.ReLU(inplace=True)
         )
         self.conv_3x3 = nn.Sequential(
-            nn.Conv2d(self.projection_dim, self.projection_dim, (3, 3), stride=(2, 2)),
-            nn.BatchNorm2d(self.projection_dim),
+            nn.Conv2d(self.projection_dim, self.projection_dim * 2, (3, 3), stride=(2, 2)),
+            nn.BatchNorm2d(self.projection_dim * 2),
             nn.ReLU(inplace=True)
         )
         self.fc1 = nn.Sequential(
-            nn.Linear(self.projection_dim * 3 * 3, self.projection_dim),
+            nn.Linear(self.projection_dim * 3 * 3 * 2, self.projection_dim),
             nn.BatchNorm1d(self.projection_dim, affine=True),
             nn.ReLU(inplace=True),
             nn.Dropout(p=0.5)
@@ -88,4 +89,43 @@ class RelativeRotationClassifier(nn.Module):
         x = x.flatten(start_dim=1)
         x = self.fc1(x)
         x = self.fc2(x)
+        return x
+
+
+class FlippingClassifier(nn.Module):
+
+    def __init__(self, input_dim, class_num=2):
+        super(FlippingClassifier,self).__init__()
+
+        self.conv = nn.Sequential()
+        self.conv.add_module('conv1_s1',nn.Conv2d(3, 96, kernel_size=11, stride=2, padding=0))
+        self.conv.add_module('relu1_s1',nn.ReLU(inplace=True))
+        self.conv.add_module('pool1_s1',nn.MaxPool2d(kernel_size=3, stride=2))
+
+
+        self.conv.add_module('conv2_s1',nn.Conv2d(96, 256, kernel_size=5, padding=2, groups=2))
+        self.conv.add_module('relu2_s1',nn.ReLU(inplace=True))
+        self.conv.add_module('pool2_s1',nn.MaxPool2d(kernel_size=3, stride=2))
+
+
+        self.conv.add_module('conv3_s1',nn.Conv2d(256, 384, kernel_size=3, padding=1))
+        self.conv.add_module('relu3_s1',nn.ReLU(inplace=True))
+
+        self.conv.add_module('conv4_s1',nn.Conv2d(384, 384, kernel_size=3, padding=1, groups=2))
+        self.conv.add_module('relu4_s1',nn.ReLU(inplace=True))
+
+        self.conv.add_module('conv5_s1',nn.Conv2d(384, 256, kernel_size=3, padding=1, groups=2))
+        self.conv.add_module('relu5_s1',nn.ReLU(inplace=True))
+        self.conv.add_module('pool5_s1',nn.MaxPool2d(kernel_size=3, stride=2))
+
+        self.classifier = nn.Sequential()
+        self.classifier.add_module('fc8',nn.Linear(256, class_num))
+
+
+
+    def forward(self, x):
+
+        x = self.conv(x)
+        x = self.classifier(x)
+
         return x

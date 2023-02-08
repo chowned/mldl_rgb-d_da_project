@@ -26,17 +26,26 @@ hp_list = [
     # Backbone. For these experiments we only use ResNet18
     'resnet18',
     # Number of epochs
+    'ep',
     args.epochs,
     # Learning rate
+    'lr',
     args.lr,
     # Learning rate multiplier for the non-pretrained parts of the network
+    'lr_m',
     args.lr_mult,
     # Batch size
+    'bs',
     args.batch_size,
     # Trade-off weight for the rotation classifier loss
+    'wr',
     args.weight_rot,
     # Trade-off weight for the entropy regularization loss
-    args.weight_ent
+    'we',
+    args.weight_ent,
+    'wd',
+    args.weight_decay
+
 ]
 if args.suffix is not None:
     hp_list.append(args.suffix)

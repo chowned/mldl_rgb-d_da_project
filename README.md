@@ -3,9 +3,8 @@ Project for a different implementation of https://github.com/MRLoghmani/relative
 
 To run the code:
 
-1) create a dataset folder, check train.sh to see how to create it
-2) download datasets and put the dataset folder into the Implementation folder
-3) if running on linux, run the train.sh script in the same folder of the python scripts
+1) create a dataset folder, check check_project.sh to see how to create it
+2) if running on linux, run the check_project.sh or run.sh script in the same folder of the python scripts
 
 Paper based on:
 
@@ -17,3 +16,5 @@ Paper based on:
 New Implementation:
 
 1) Changing implementation on original pytorch https://github.com/pytorch/vision/blob/1aef87d01eec2c0989458387fa04baebcc86ea7b/torchvision/models/resnet.py#L75
+2) Code for the bottleneck has been modified from https://docs.microsoft.com/en-us/windows/ai/windows-ml/tutorials/pytorch-train-model .
+3) https://github.com/bbrattoli/JigsawPuzzlePytorch

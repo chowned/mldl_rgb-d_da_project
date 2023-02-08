@@ -4,7 +4,9 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 
-from net import ResBase, ResClassifier, RelativeRotationClassifier, Convolutional
+from torch.optim import Adam
+
+from net import ResBase, ResClassifier, RelativeRotationClassifier, AUTOENCODER
 #import custom_resnet
 from data_loader import DatasetGeneratorMultimodal, MyTransform, INPUT_RESOLUTION
 from utils import *
@@ -27,7 +29,7 @@ hp_list = [
     #'rgbd-ae',
     # Backbone. For these experiments we only use ResNet34
     #'resnet34',
-    'bottleneck', #custom era prima
+    'BN_custom_Adam_noRNN', #custom era prima
     # Number of epochs
     args.epochs,
     # Learning rate
@@ -170,8 +172,8 @@ net_list = map_to_device(device, net_list)
 ce_loss = nn.CrossEntropyLoss()
 
 # Optimizers
-opt_g_rgb = optim.SGD(netG_rgb.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
-opt_g_depth = optim.SGD(netG_depth.parameters(), lr=args.lr, momentum=0.9, weight_decay=args.weight_decay)
+opt_g_rgb = Adam(netG_rgb.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+opt_g_depth = Adam(netG_depth.parameters(), lr=args.lr, weight_decay=args.weight_decay) #, momentum=0.9
 opt_f = optim.SGD(netF.parameters(), lr=args.lr * args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
 opt_f_rot = optim.SGD(netF_rot.parameters(), lr=args.lr * args.lr_mult, momentum=0.9, weight_decay=args.weight_decay)
 

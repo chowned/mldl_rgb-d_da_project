@@ -125,7 +125,7 @@ def add_base_args(parser: argparse.ArgumentParser):
     parser.add_argument("--weight_decay", default=0.05, type=float, help="Weight decay regularization")
     parser.add_argument("--dropout_p", default=0.5, help="Dropout (not for the backbone!)")
 
-    parser.add_argument('--test_batches', default=100, type=int,
+    parser.add_argument('--test_batches', default=1000, type=int,
                         help="Number of batches to be considered at test time for source classification and the"
                              " rotation task. Note that the evaluation on target is always done on all batches")
     parser.add_argument('--resume', action='store_true', help="Resume from checkpoint if it exists")
