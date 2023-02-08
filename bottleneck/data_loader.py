@@ -1,6 +1,8 @@
 import os
 import random
 
+import numpy as np
+
 from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms.functional as TF
@@ -18,7 +20,9 @@ def is_image_file(filename):
 
 
 def load_image(path):
-    return Image.open(path).convert('RGB')
+    image = Image.open(path).convert('RGB')
+    #fft = np.fft.fft2(image)
+    return image
 
 
 def make_sync_dataset(root, label, ds_name='synROD'):

@@ -1,93 +1,12 @@
 import torch.nn as nn
 from torchvision import models
+
 #import pretrainedmodels
-from data_loader import INPUT_RESOLUTION
+#from data_loader import INPUT_RESOLUTION
 
+#INPUT_LAYER = 64
 
-class Resnet18(nn.Module):
-    def __init__(self):
-        super(Resnet18, self).__init__()
-        self.model =  pretrainedmodels.__dict__['resnet18']()
-        self.classifier_layer = nn.Sequential(
-            nn.Linear(512 , 256),
-            nn.BatchNorm1d(256),
-            nn.Dropout(0.2),
-            nn.Linear(256 , 128),
-            nn.Linear(128 , 512)
-        )
-
-
-    def forward(self, x):
-        batch_size ,_,_,_ = x.shape #taking out batch_size from input image
-        x = self.model.features(x)
-        x = nn.functional.adaptive_avg_pool2d(x,1).reshape(batch_size,-1) # then reshaping the batch_size
-        x = self.classifier_layer(x)
-        # Non-pooled tensor
-        x_p = x
-        #x = self.avgpool(x)
-        # Flatten the pooled tensor
-        #x = x.flatten(start_dim=1)
-
-        # Return both
-        return x, x_p
-
-
-
-
-#convolutional neural network with bottlenech following autoencoder
-class Convolutional(nn.Module):
-    def __init__(self):
-        super(Convolutional, self).__init__()
-
-        # Building an linear encoder with Linear
-        # layer followed by Relu activation function
-        # INPUT_RESOLUTION ==> 9
-        self.encoder = nn.Sequential(
-            nn.Linear(INPUT_RESOLUTION, 128),
-            nn.ReLU(),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Linear(64, 36),
-            nn.ReLU(),
-            nn.Linear(36, 18),
-            nn.ReLU(),
-            nn.Linear(18, 9)
-        )
-
-        # Building an linear decoder with Linear
-        # layer followed by Relu activation function
-        # The Sigmoid activation function
-        # outputs the value between 0 and 1
-        # 9 ==> INPUT_RESOLUTION
-        self.decoder = nn.Sequential(
-            nn.Linear(9, 18),
-            nn.ReLU(),
-            nn.Linear(18, 36),
-            nn.ReLU(),
-            nn.Linear(36, 64),
-            nn.ReLU(),
-            nn.Linear(64, 128),
-            nn.ReLU(),
-            nn.Linear(128, INPUT_RESOLUTION),
-            nn.ReLU(),
-            nn.Linear(INPUT_RESOLUTION, 512),
-            nn.Sigmoid()
-        )
-
-    def forward(self, x):
-        encoded = self.encoder(x)
-        decoded = self.decoder(encoded)
-        # Non-pooled tensor
-        x_p = x
-        # WHY TF it is not included in the normal implementation of convolutional network?
-        convAvgpool = nn.AdaptiveAvgPool1d(3)
-        #from original implementation
-        x = convAvgpool(x)
-        # Flatten the pooled tensor
-        x = x.flatten(start_dim=1)
-
-        # Return both
-        return x, x_p
+#nn.Dropout(p=0.5,inplace=True)
 
 class ResBase(nn.Module):
     def __init__(self):
@@ -97,43 +16,171 @@ class ResBase(nn.Module):
 
         # "Steal" pretrained layers from the torchvision pretrained Resnet18
         self.conv1 = model_resnet.conv1
-        #self.bn1 = model_resnet.bn1
-        self.bn1 = nn.BatchNorm2d(3)
+        self.bn1 = model_resnet.bn1
+        #self.bn1 = nn.BatchNorm2d(3)
         self.relu = model_resnet.relu
         self.maxpool = model_resnet.maxpool
+
+        input_l=64
+        l1 = 50
+        l2 = 40
+        l3 = 34
+        l4 = 24
+        l5 = 14
+        l6 = 24
+        l7 = 34
+        l8 = 40
+        l9 = 50
+        kernel=3
+
+        self.encoder = nn.Sequential(
+            #implementing a neuron bottleneck
+
+
+
+            nn.Conv2d(in_channels=input_l, out_channels=l1, kernel_size=kernel, stride=1, padding=1),
+            nn.ReLU(True),
+            nn.BatchNorm2d(l1),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l1, out_channels=l2, kernel_size=kernel, stride=1, padding=1),
+            nn.ReLU(True),
+            nn.BatchNorm2d(l2),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l2, out_channels=l3, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l3),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l3, out_channels=l4, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l4),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l4, out_channels=l5, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l5),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l5, out_channels=l6, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l6),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l6, out_channels=l7, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l7),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l7, out_channels=l8, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l8),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l8, out_channels=l9, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(l9),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+
+            nn.Conv2d(in_channels=l9, out_channels=input_l, kernel_size=kernel, stride=1, padding=1),
+            nn.BatchNorm2d(input_l),
+            nn.ReLU(True),
+            #nn.Dropout(p=0.5),
+            )
+
         self.layer1 = model_resnet.layer1
-        self.layer2 = model_resnet.layer2
-
-
-        #implementing a neuron bottleneck
-        self.conv5 = nn.Conv2d(in_channels=128, out_channels=40, kernel_size=5, stride=1, padding=1)
-        self.bn5 = nn.BatchNorm2d(40)
-        self.conv6 = nn.Conv2d(in_channels=40, out_channels=64, kernel_size=5, stride=1, padding=1)
-        self.bn6 = nn.BatchNorm2d(64)
-        self.conv7 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=5, stride=1, padding=1)
-        self.bn7 = nn.BatchNorm2d(128)
-
-
+        self.layer2 = model_resnet.layer2 #after is 128
 
         self.layer3 = model_resnet.layer3
         self.layer4 = model_resnet.layer4
+
+
         self.avgpool = model_resnet.avgpool
 
     def forward(self, x):
-        #x = self.conv1(x)
+
+        x = self.conv1(x)
+        x = self.encoder(x)
         x = self.bn1(x)
         x = self.relu(x)
-        x = self.conv1(x)
+
         x = self.maxpool(x)
+
+        #x = self.encoder(x)
+
         x = self.layer1(x)
         x = self.layer2(x)
-
-        x = nn.functional.relu(self.bn5(self.conv5(x)))
-        x = nn.functional.relu(self.bn6(self.conv6(x)))
-        x = nn.functional.relu(self.bn7(self.conv7(x)))
-
-
         x = self.layer3(x)
+        x = self.layer4(x)
+
+        # Non-pooled tensor
+        x_p = x
+        x = self.avgpool(x)
+        # Flatten the pooled tensor
+        x = x.flatten(start_dim=1)
+
+        # Return both
+        return x, x_p
+
+
+class AUTOENCODER(nn.Module):
+    def __init__(self):
+        super(ResBase,self).__init__()
+
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+
+        #self.bn1 = nn.BatchNorm2d(3)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+
+
+
+
+
+        self.encoder = nn.Sequential(
+            nn.Conv2d(64, 32, 3, stride=3, padding=1),
+            nn.ReLU(True),
+            nn.Dropout(p=0.5,inplace=True),
+            nn.MaxPool2d(2, stride=2),
+        nn.Conv2d(32, 16, 3, stride=2, padding=1),
+        nn.ReLU(True),
+        nn.Dropout(p=0.5,inplace=True),
+        nn.MaxPool2d(2, stride=1),
+        nn.Conv2d(16, 8, 3, stride=3, padding=1),
+        nn.ReLU(True),
+        nn.Dropout(p=0.5,inplace=True),
+        nn.MaxPool2d(2, stride=2),
+        )
+        self.decoder = nn.Sequential(
+       nn.ConvTranspose2d(8, 16, 3, stride=2),
+       nn.ReLU(True),
+       nn.Dropout(p=0.5,inplace=True),
+       nn.ConvTranspose2d(16, 32, 5, stride=3, padding=1),
+       nn.ReLU(True),
+       nn.Dropout(p=0.5,inplace=True),
+       nn.ConvTranspose2d(32, 256, 2, stride=2, padding=1),
+       nn.Dropout(p=0.5,inplace=True),
+       nn.Tanh()
+        )
+
+        self.layer4 = model_resnet.layer4
+
+        self.avgpool = model_resnet.avgpool
+
+
+
+
+    def forward(self,x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+
+
+        x = self.encoder(x)
+        x = self.decoder(x)
         x = self.layer4(x)
         # Non-pooled tensor
         x_p = x
@@ -181,7 +228,7 @@ class RelativeRotationClassifier(nn.Module):
             nn.ReLU(inplace=True)
         )
         self.fc1 = nn.Sequential(
-            nn.Linear(self.projection_dim * 1 * 4, self.projection_dim),
+            nn.Linear(self.projection_dim * 3 * 3, self.projection_dim),
             nn.BatchNorm1d(self.projection_dim, affine=True),
             nn.ReLU(inplace=True),
             nn.Dropout(p=0.5)
