@@ -1,5 +1,5 @@
 # mldl_rgb-d_da_project
-Project for a different implementation of https://github.com/MRLoghmani/relative-rotation for DA on RGB-D pictures
+Project for a different implementation of https://github.com/MRLoghmani/relative-rotation for DA on RGB-D pictures.
 
 To run the code:
 
